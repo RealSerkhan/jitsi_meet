@@ -10,10 +10,17 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.gunschu.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_MEETING_CLOSE
 import com.gunschu.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_PLUGIN_TAG
+import com.gunschu.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_READY_MEETING_CLOSE
+import org.jitsi.meet.sdk.BroadcastAction
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
+import org.jitsi.meet.sdk.log.JitsiMeetLogger
+import org.webrtc.ContextUtils.getApplicationContext
+
 
 /**
  * Activity extending JitsiMeetActivity in order to override the conference events
@@ -28,6 +35,9 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
                 putExtra("JitsiMeetConferenceOptions", options)
             }
             context?.startActivity(intent)
+            val muteBroadcastIntent = Intent(BroadcastEvent.Type.READY_TO_CLOSE.action)
+            muteBroadcastIntent.putExtra("closed", "closed")
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(muteBroadcastIntent)
         }
     }
 
@@ -49,13 +59,37 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
         }
     }
 
+
+
     private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent?.action) {
                 JITSI_MEETING_CLOSE -> finish()
+                JITSI_READY_MEETING_CLOSE -> finish()
+
             }
         }
     }
+    override fun onReadyToClose() {
+        JitsiMeetLogger.i("SDK is ready to close")
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(BroadcastEvent.Type.READY_TO_CLOSE.action)
+        registerReceiver(myReceiver, intentFilter)
+        JitsiMeetEventStreamHandler.instance.onReadyToClose()
+        finish()
+        super.onConferenceTerminated(HashMap())
+
+    }
+
+    override fun onParticipantLeft(extraData: java.util.HashMap<String, Any>?) {
+        super.onParticipantLeft(extraData)
+        JitsiMeetLogger.i("Participant left")
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(BroadcastEvent.Type.PARTICIPANT_LEFT.action)
+        registerReceiver(myReceiver, intentFilter)
+        JitsiMeetEventStreamHandler.instance.onParticipantLeft(extraData)
+    }
+
 
     override fun onStop() {
         super.onStop()

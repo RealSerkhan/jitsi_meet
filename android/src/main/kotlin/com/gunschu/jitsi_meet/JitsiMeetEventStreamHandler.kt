@@ -58,5 +58,17 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
         data?.put("event", "onPictureInPictureTerminated")
         eventSink?.success(data)
     }
+    fun onParticipantLeft(data: MutableMap<String, Any>?) {
+        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onParticipantLeft")
+        data?.put("event", "onParticipantLeft")
+        eventSink?.success(data)
+    }
+    fun onReadyToClose() {
+        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onReadyToClose")
+        var data=LinkedHashMap<String, String>();
+        data?.put("event", "onReadyToClose")
+        eventSink?.success(data)
+    }
+
 
 }

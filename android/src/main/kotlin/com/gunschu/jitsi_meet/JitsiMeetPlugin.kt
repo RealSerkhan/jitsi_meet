@@ -76,6 +76,7 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
         const val JITSI_METHOD_CHANNEL = "jitsi_meet"
         const val JITSI_EVENT_CHANNEL = "jitsi_meet_events"
         const val JITSI_MEETING_CLOSE = "JITSI_MEETING_CLOSE"
+        const val JITSI_READY_MEETING_CLOSE = "READY_TO_CLOSE"
     }
 
     /**
@@ -92,6 +93,7 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
             "closeMeeting" -> {
                 closeMeeting(call, result)
             }
+
             else -> result.notImplemented()
         }
     }
@@ -182,6 +184,7 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
     override fun onDetachedFromActivityForConfigChanges() {
         onDetachedFromActivity()
     }
+
 
 
 }

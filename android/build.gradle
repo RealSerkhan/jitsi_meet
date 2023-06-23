@@ -9,7 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.0.4'
+
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -18,7 +19,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
         maven {
             url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
         }
@@ -39,7 +39,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 24
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -60,4 +60,5 @@ dependencies {
 
     // Jitsi Meet from https://github.com/jitsi/jitsi-maven-repository/tree/master/releases/org/jitsi/react/jitsi-meet-sdk
     implementation ('org.jitsi.react:jitsi-meet-sdk:5.1.0') { transitive = true }
+//    implementation ('org.jitsi.react:jitsi-meet-sdk:+') { transitive = true }
 }
