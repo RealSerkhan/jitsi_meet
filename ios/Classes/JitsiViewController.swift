@@ -139,6 +139,21 @@ extension JitsiViewController: JitsiMeetViewDelegate {
         }
         
     }
+    func ready(toClose data: [AnyHashable : Any]!) {
+        //        print("CONFERENCE TERMINATED")
+        var mutatedData = data
+        mutatedData?.updateValue("onConferenceTerminated", forKey: "event")
+        self.eventSink?(mutatedData)
+        
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.hide() { _ in
+                self.cleanUp()
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+        
+    }
+    
     
     func enterPicture(inPicture data: [AnyHashable : Any]!) {
         //        print("CONFERENCE PIP IN")

@@ -15,7 +15,8 @@ Jitsi Meet Plugin
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'JitsiMeetSDK', '8.1.2'
+#  s.dependency 'JitsiMeetSDK', '8.1.2'
+  s.dependency 'JitsiMeetSDK', '7.0.1'
   s.platform = :ios, '12.0'
   s.ios.deployment_target = '12.0'
   
