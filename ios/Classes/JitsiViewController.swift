@@ -142,7 +142,7 @@ extension JitsiViewController: JitsiMeetViewDelegate {
     func ready(toClose data: [AnyHashable : Any]!) {
         //        print("CONFERENCE TERMINATED")
         var mutatedData = data
-        mutatedData?.updateValue("onConferenceTerminated", forKey: "event")
+        mutatedData?.updateValue("onClosed", forKey: "event")
         self.eventSink?(mutatedData)
         
         DispatchQueue.main.async {
